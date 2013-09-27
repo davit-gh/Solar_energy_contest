@@ -1,5 +1,5 @@
 backward.selection<-function(data,y,folds=10){  
-  selected <- list()
+  selected <- data
   score_hist <- list()
   while(length(score_hist) < 2 || last(score_hist) < last(score_hist,1)){
     if(length(selected) > 0){
