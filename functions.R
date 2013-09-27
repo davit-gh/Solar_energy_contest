@@ -1,4 +1,4 @@
-f.upd3<-function(data,y,folds=10){  
+f.upd<-function(data,y,folds=10){  
   selected <- list()
   score_hist <- list()
   while(length(score_hist) < 2 || last(score_hist) < last(score_hist,1)){
