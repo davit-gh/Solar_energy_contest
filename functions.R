@@ -1,5 +1,9 @@
 backward.selection<-function(data,y,folds=10){  
   model <- lm(y ~ ., data = cbind(data,y))
+  #train.x <- data.matrix(data)
+  #train.y <- data.matrix(y)
+  #model <- glmnet(train.x,train.y,family="gaussian")
+  #step() function only accepts lm() & glm() not glmnet()
   back.elim <- step(model,direction="backward",trace=F)
   return(back.elim)
 }
@@ -13,6 +17,7 @@ lm_prediction <- function(lm.f,test){
   sc.test<-data.frame(scale(test))
   testpoly3<-get.poly(sc.test,3)
   pred<-predict(lm.f,testpoly3)
+  #pred<-predict(lm.f,type="response",newx=testpoly3)
   submat<-data.frame(matrix(pred,ncol=98,byrow=T))
   return(submat)
 }
@@ -22,7 +27,7 @@ get.station_names<-function(f){
   st.names<-names(st.names)[-1]
 }
 
-readData<-function(fname='spline_train.csv'){
+readData<-function(fname='spline_train500.csv'){
   data = read.csv(fname,header=F)
   dat = data[,c(2:16)]
   target = data[,17]
@@ -30,11 +35,11 @@ readData<-function(fname='spline_train.csv'){
   return(list(dat = dat, target = target))
 }
 
-conclude<-function(datList){
+conclude<-function(datList,degree){
   dat<-datList$dat
   target<-data.frame(y=datList$target)
   scdat<-data.frame(scale(dat))
-  poly3<-get.poly(scdat,3)
+  poly3<-get.poly(scdat,degree)
   model<-backward.selection(poly3,target)
 }
 #test<-read.csv("C:/Users/Administrator/Documents/Java_Proj/eclipse/python/solar/src/sol/spline_test.csv",header=F)
